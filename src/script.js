@@ -62,7 +62,7 @@ const renderCountry = function (data, className = "") {
   for (let x in data.currencies) currency.push(data.currencies[x].name);
 
   const html = `
-    <article class="country">
+    <article class="country ${className}">
         <img class="country__img" src="${data.flags.svg}" alt="${
     data.flags.alt
   }" />
@@ -84,6 +84,12 @@ const renderCountry = function (data, className = "") {
 const getCountryData = function (country) {
   fetch(`https://restcountries.com/v3.1/name/${country}`)
     .then((response) => response.json())
-    .then((data) => renderCountry(data[0]));
+    .then((data) => {
+      renderCountry(data[0]);
+      const neighbor = data[0].borders[0];
+      return fetch(`https://restcountries.com/v3.1/alpha/${neighbor}`);
+    })
+    .then((response) => response.json())
+    .then((data) => renderCountry(data[0], "neighbor"));
 };
-getCountryData("japan");
+getCountryData("finland");
