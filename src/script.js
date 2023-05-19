@@ -2,6 +2,8 @@
 
 const countriesContainer = document.querySelector(".countries");
 
+const btn = document.querySelector(".btn-country");
+
 // const getCountryData = function (country) {
 //   const request = new XMLHttpRequest();
 //   request.open("GET", `https://restcountries.com/v3.1/name/${country}`);
@@ -55,6 +57,11 @@ const countriesContainer = document.querySelector(".countries");
 // const request = fetch("https://restcountries.com/v3.1/name/japan");
 // console.log(request);
 
+const renderError = function (msg) {
+  countriesContainer.insertAdjacentText("beforeend", msg);
+  // countriesContainer.style.opacity = 1;
+};
+
 const renderCountry = function (data, className = "") {
   const language = [];
   for (let x in data.languages) language.push(data.languages[x]);
@@ -78,7 +85,7 @@ const renderCountry = function (data, className = "") {
      </article>
     `;
   countriesContainer.insertAdjacentHTML("beforeend", html);
-  countriesContainer.style.opacity = 1;
+  // countriesContainer.style.opacity = 1;
 };
 
 const getCountryData = function (country) {
@@ -90,6 +97,15 @@ const getCountryData = function (country) {
       return fetch(`https://restcountries.com/v3.1/alpha/${neighbor}`);
     })
     .then((response) => response.json())
-    .then((data) => renderCountry(data[0], "neighbor"));
+    .then((data) => renderCountry(data[0], "neighbor"))
+    .catch((err) =>
+      renderError(`Something Went Wrong 😕, ${err.message}. Try Again!`)
+    )
+    .finally(() => {
+      countriesContainer.style.opacity = 1;
+    });
 };
-getCountryData("finland");
+
+btn.addEventListener("click", function () {
+  getCountryData("dsfdsfdsfs");
+});

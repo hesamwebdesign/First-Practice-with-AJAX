@@ -100,7 +100,7 @@ body {
   font-size: 2.4rem;
 }
 
-/* .btn-country {
+.btn-country {
   border: none;
   font-size: 2rem;
   padding: 2rem 5rem;
@@ -108,9 +108,9 @@ body {
   color: white;
   background-color: orangered;
   cursor: pointer;
-} */
+}
 
-/* .images {
+.images {
   display: flex;
 }
 
@@ -125,4 +125,4 @@ body {
   margin: 2rem;
   border: 3rem solid white;
   box-shadow: 0 2rem 5rem 1rem rgba(0, 0, 0, 0.1);
-} */
+}
