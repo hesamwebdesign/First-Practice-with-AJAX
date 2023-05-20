@@ -88,24 +88,42 @@ const renderCountry = function (data, className = "") {
   // countriesContainer.style.opacity = 1;
 };
 
+const getJSON = function (url, errorMsg = "Something went wrong 😕 ") {
+  return fetch(url).then((response) => {
+    console.log(response);
+    if (!response.ok) {
+      throw new Error(`${errorMsg} (${response.status})`);
+    }
+    return response.json();
+  });
+};
+
 const getCountryData = function (country) {
-  fetch(`https://restcountries.com/v3.1/name/${country}`)
-    .then((response) => response.json())
+  getJSON(
+    `https://restcountries.com/v3.1/name/${country}`,
+    "Country not found!"
+  )
     .then((data) => {
       renderCountry(data[0]);
+      if (!data[0].hasOwnProperty("borders")) {
+        throw new Error("This country has no neighbor");
+      }
       const neighbor = data[0].borders[0];
-      return fetch(`https://restcountries.com/v3.1/alpha/${neighbor}`);
+      return getJSON(
+        `https://restcountries.com/v3.1/alpha/${neighbor}`,
+        "Neighbor not found!"
+      );
     })
-    .then((response) => response.json())
     .then((data) => renderCountry(data[0], "neighbor"))
-    .catch((err) =>
-      renderError(`Something Went Wrong 😕, ${err.message}. Try Again!`)
-    )
+    .catch((err) => {
+      // console.error(err);
+      renderError(`${err.message}`);
+    })
     .finally(() => {
       countriesContainer.style.opacity = 1;
     });
 };
 
 btn.addEventListener("click", function () {
-  getCountryData("dsfdsfdsfs");
+  getCountryData("japan");
 });
